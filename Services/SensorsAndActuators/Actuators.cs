@@ -77,7 +77,7 @@ public class Actuators : IActuators
         actuator.Name = OriginalActuator.Name;
         actuator.AssignedVariableId = OriginalActuator.AssignedVariableId;
 
-        // Reatachar y actualizar
+        // Reattach and update
         _databasesActions.UpdateDevice(actuator);
 
         return default;

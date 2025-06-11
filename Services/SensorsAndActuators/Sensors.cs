@@ -104,7 +104,7 @@ public class Sensors : ISensors
         sensor.Name = OriginalSensor.Name;
         sensor.AssignedVariableId = OriginalSensor.AssignedVariableId;
 
-        // Reatachar y actualizar
+        // Reattach and update
         _databasesActions.UpdateDevice(sensor);
 
         return default;
