@@ -582,7 +582,8 @@ public class DatabasesActions : IDatabasesActions
         do
         {
             Token = GenerateCode();
-        } while (_Context.Actuators.FirstOrDefault(actual => actual.Token == Token) != default && _Context.Sensors.FirstOrDefault(actual => actual.Token == Token) != default);
+        } while (_Context.Actuators.Any(actual => actual.Token == Token) ||
+                 _Context.Sensors.Any(actual => actual.Token == Token));
         return Token;
     }
     public string GenerateDeviceReference()
