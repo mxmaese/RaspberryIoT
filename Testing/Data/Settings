@@ -8,7 +8,7 @@
   ],
   "IsDebug": false,
   "CalculateDynamicVariablesInterval": -1.0,
-  "RealoadPendingCodeReferenceInterval": 10080.0,
+  "ReloadPendingCodeReferenceInterval": 10080.0,
   "ReferenceCodeExpirationTime": 10080.0,
   "ReferenceCodeLength": 8,
   "DatabaseConection": {
