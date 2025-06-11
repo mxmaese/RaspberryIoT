@@ -1,0 +1,27 @@
+﻿@page
+@model Web.Pages.Auth.LoginModel
+@{
+    ViewData["Title"] = "Login";
+}
+<div id="loginModal" class="">
+    <div class="modal-content">
+        <h2>Iniciar Sesión</h2>
+        <form id="loginForm" method="post">
+            <div class="form-group">
+                <label for="loginUser">Nombre de Usuario</label>
+                <input type="text" id="LoginUser" name="LoginForm.LoginUsername">
+                <span class="error-message" id="LoginUserError">@ModelState["LoginForm.LoginUsername"]?.Errors.FirstOrDefault()?.ErrorMessage</span><!--Por favor, ingrese su Nombre de usuario-->
+            </div>
+            <div class="form-group">
+                <label for="loginPassword">Contraseña</label>
+                <input type="password" id="LoginPassword" name="LoginForm.LoginPassword">
+                <span class="error-message" id="LoginPasswordError">@ModelState["LoginForm.LoginPassword"]?.Errors.FirstOrDefault()?.ErrorMessage</span><!--Por favor, ingrese su contraseña-->
+            </div>
+            <button type="submit" class="form-submit">Iniciar Sesión</button>
+            <a href="https://domoticpro.com/recuperar-password" class="form-link">¿Olvidaste tu contraseña?</a>
+        </form>
+    </div>
+</div>
+@section Scripts {
+    <script src="~/js/Auth/Login.js" asp-append-version="true"></script>
+}

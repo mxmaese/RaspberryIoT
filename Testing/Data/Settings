@@ -1,0 +1,21 @@
+{
+  "Logs": null,
+  "Cookies": [
+    {
+      "CookieName": "LanguageId",
+      "CookieType": 0
+    }
+  ],
+  "IsDebug": false,
+  "CalculateDynamicVariablesInterval": -1.0,
+  "RealoadPendingCodeReferenceInterval": 10080.0,
+  "ReferenceCodeExpirationTime": 10080.0,
+  "ReferenceCodeLength": 8,
+  "DatabaseConection": {
+    "DatabaseName": "iot",
+    "DatabaseUser": "Server",
+    "DatabasePassword": "ThisIsMyUltraSecurePassword",
+    "DatabaseHost": "localhost",
+    "DatabasePort": 0
+  }
+}

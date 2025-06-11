@@ -1,0 +1,46 @@
+﻿@page
+@model Web.Pages.Devices.Edit.SensorsEditModel
+@{
+    ViewData["Title"] = "Edit sensor";
+}
+@section Styles {
+    <link rel="stylesheet" href="~/css/Devices/Devices.css" asp-append-version="true" />
+}
+
+<h1>Edit sensor</h1>
+<form method="post">
+    <input type="hidden" asp-for="Sensor.SensorId" />
+    <div class="form-group">
+        <label asp-for="Sensor.Name"></label>
+        <input asp-for="Sensor.Name" class="form-control" />
+        <span asp-validation-for="Sensor.Name"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Sensor.AssignedVariableId"></label>
+        <input asp-for="Sensor.AssignedVariableId" class="form-control" />
+        <span asp-validation-for="Sensor.AssignedVariableId"></span>
+    </div>
+    <div class="form-group" style="text-align: -webkit-center;">
+        <div style="width: 80%">
+            <div style="width: 49%; text-align: center; display: inline-block">
+                <label style="display: inline-block;">Token:</label>
+                <label style="display: inline-block; margin-left: 10px">@Model.Sensor.Token</label>
+            </div>
+            <div style="width: 49%; text-align: center; display: inline-block">
+                <button type="submit" class="action-btn btn-create" asp-page-handler="Regenerate">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    Regenerate Token
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <button type="submit" asp-page-handler="Save"
+            class="action-btn btn-create"
+            style="display: inline-block; margin-left:50px;background-color:green;">
+        Save
+    </button>
+</form>

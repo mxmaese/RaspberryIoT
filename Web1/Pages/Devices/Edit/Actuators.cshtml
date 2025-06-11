@@ -1,0 +1,20 @@
+﻿@page
+@model Web.Pages.Devices.Edit.ActuatorsModel
+@{
+    ViewData["Title"] = "Edit actuators";
+}
+
+<h1>Edit actuators</h1>
+<form method="post">
+    <div>
+        <label for="Name">Nombre:</label>
+        <input type="text" id="Name" name="Name" value="@Model.Actuator.Name" />
+        <span name="Name">@ModelState["Name"]?.Errors.FirstOrDefault()</span>
+    </div>
+    <div>
+        <label for="VariableId">Variable Asignada:</label>
+        <input type="type" name="AssignedVariableId" value="@Model.Actuator.AssignedVariableId" />
+        <span name="AssignedVariableId">@ModelState["AssignedVariableId"]?.Errors.FirstOrDefault()</span>
+    </div>
+    <input type="submit" value="Enviar" />
+</form>

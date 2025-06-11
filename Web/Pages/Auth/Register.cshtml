@@ -1,0 +1,42 @@
+﻿@page
+@model Web.Pages.Auth.RegisterModel
+@{
+    ViewData["Title"] = "Register";
+}
+
+<div id="registerModal" class="">
+    <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <h2>Crear Cuenta</h2>
+        <form id="registerForm" method="post">
+            <div class="form-group">
+                <label for="registerName">Nombre de Usuario</label>
+                <input type="text" id="registerName" name="RegisterForm.RegisteUsername">
+                <span class="error-message" id="registerNameError">@ModelState["RegisterForm.RegisteUsername"]?.Errors.FirstOrDefault()?.ErrorMessage</span>
+                <!--span class="error-message" id="registerNameError">Por favor, ingrese su nombre completo</span-->
+            </div>
+            <div class="form-group">
+                <label for="registerEmail">Correo Electrónico</label>
+                <input type="email" id="registerEmail" name="RegisterForm.RegisterEmail">
+                <span class="error-message" id="registerEmailError">@ModelState["RegisterForm.RegisterEmail"]?.Errors.FirstOrDefault()?.ErrorMessage</span>
+                <!--span class="error-message" id="registerEmailError">Por favor, ingrese su correo electrónico</!--span-->
+            </div>
+            <div class="form-group">
+                <label for="registerPassword">Contraseña</label>
+                <input type="password" id="registerPassword" name="RegisterForm.RegisterPassword">
+                <span class="error-message" id="registerPasswordError">@ModelState["RegisterForm.RegisterPassword"]?.Errors.FirstOrDefault()?.ErrorMessage</span>
+                <!--span class="error-message" id="registerPasswordError">Por favor, ingrese una contraseña</!--span-->
+            </div>
+            <div class="form-group">
+                <label for="registerPasswordConfirm">Confirmar Contraseña</label>
+                <input type="password" id="registerPasswordConfirm" name="RegisterForm.RegisterPasswordConfirm">
+                <span class="error-message" id="registerPasswordConfirmError">@ModelState["RegisterForm.RegisterPasswordConfirm"]?.Errors.FirstOrDefault()?.ErrorMessage</span>
+                <!--span class="error-message" id="registerPasswordConfirmError">Por favor, confirme su contraseña</!--span-->
+            </div>
+            <button type="submit" class="form-submit">Crear Cuenta</button>
+        </form>
+    </div>
+</div>
+@section Scripts {
+    <script src="~/js/Auth/Register.js" asp-append-version="true"></script>
+}

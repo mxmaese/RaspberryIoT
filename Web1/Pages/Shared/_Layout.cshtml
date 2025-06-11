@@ -1,0 +1,83 @@
+﻿@using Microsoft.AspNetCore.Authentication;
+@using Microsoft.AspNetCore.Authorization;
+@{
+    var isAuthenticated = User.Identity.IsAuthenticated;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Web</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Web.styles.css" asp-append-version="true" />
+    @RenderSectionAsync("Styles", required: false)
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="nav-content">
+                <!-- crea un link que no dirija a domoticapro.com que lleve a la raiz de la pagina web-->
+                <a href="/" class="logo layoutlink">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                        <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                    </svg>
+                    <span>DomoticPro</span>
+                </a>
+
+
+                
+                <div class="nav-links">
+                    @if (isAuthenticated)
+                    {
+                        <a asp-area="" asp-page="/Devices/Sensors" class="layoutlink">Sensores</a>
+                        <a asp-area="" asp-page="/Devices/Actuators" class="layoutlink">Actuadores</a>
+                        <a asp-area="" asp-page="/Devices/Variables" class="layoutlink">Variables</a>
+                        <a asp-area="" asp-page="/Auth/Logout" class="btn btn-login">Cerrar sesión</a>
+                        <a asp-area="" asp-page="" class="btn btn-register">Tablero</a>
+                    }
+                    else
+                    {
+                        <a href="/productos" class="layoutlink">Productos</a>
+                        <a href="/soluciones" class="layoutlink">Soluciones</a>
+                        <a href="/soporte" class="layoutlink">Soporte</a>
+                        <a asp-area="" asp-page="/Auth/Login" class="btn btn-login">Iniciar Sesión</a>
+                        <a asp-area="" asp-page="/Auth/Register" class="btn btn-register">Crear Cuenta</a>
+                    }
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        @{
+            var could = bool.TryParse(ViewData["ConteinsMain"]?.ToString(), out bool ContainsMain);
+            ContainsMain = !could ? true : ContainsMain;
+            if (ContainsMain)
+            {
+                <main role="main" class="hero">
+                    @RenderBody()
+                </main>
+            }
+            else
+            {
+                @RenderBody()
+            }
+        }
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2024 - Web - <a asp-area="" asp-page="/Privacy">Privacy</a>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

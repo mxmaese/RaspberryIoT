@@ -1,0 +1,38 @@
+﻿@page
+@model Web.Pages.Devices.Add.SensorsAddModel
+@{
+    ViewData["Title"] = "Add sensors";
+}
+@section Styles {
+    <link rel="stylesheet" href="~/css/Devices/Devices.css" asp-append-version="true" />
+}
+
+<h1>Create sensors</h1>
+<form method="post">
+    <div class="form-group">
+        <label asp-for="Sensor.Name"></label>
+        <input asp-for="Sensor.Name" class="form-control" />
+        <span asp-validation-for="Sensor.Name"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Sensor.LocationId"></label>
+        <input asp-for="Sensor.LocationId" class="form-control" />
+        <span asp-validation-for="Sensor.LocationId"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Sensor.GroupId"></label>
+        <input asp-for="Sensor.GroupId" class="form-control" />
+        <span asp-validation-for="Sensor.GroupId"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Sensor.AssignedVariableId"></label>
+        <input asp-for="Sensor.AssignedVariableId" class="form-control" />
+        <span asp-validation-for="Sensor.AssignedVariableId"></span>
+    </div>
+
+    <button type="submit" asp-page-handler="Save"
+            class="action-btn btn-create"
+            style="display: inline-block; margin-left:50px;background-color:green;">
+        Create
+    </button>
+</form>

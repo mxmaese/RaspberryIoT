@@ -1,0 +1,29 @@
+﻿@page
+@using Microsoft.AspNetCore.Authentication
+@using Microsoft.AspNetCore.Authorization
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+    bool isAuthenticated = User.Identity.IsAuthenticated;
+}
+@if (isAuthenticated)
+{
+    <p>Hola, @User.Identity.Name. Gracias por iniciar sesión.</p>
+    <a href="/Auth/Logout">Cerrar sesión</a>
+}
+else
+{
+    <h1>Transforma tu hogar en un espacio inteligente</h1>
+    <p>Descubre el futuro de la domótica con nuestras soluciones inteligentes y personalizables</p>
+
+    <svg class="smart-home-icon" width="200" height="200" viewBox="0 0 24 24" fill="none" stroke-width="1.5">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+        <path d="M12 15v3m-3-3h6"></path>
+        <circle cx="12" cy="12" r="3"></circle>
+        <path d="M4 12h2m12 0h2M12 4v2"></path>
+    </svg>
+    <!--div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    </div-->
+}

@@ -1,0 +1,38 @@
+﻿@page
+@model Web.Pages.Devices.Add.ActuatorsAddModel
+@{
+    ViewData["Title"] = "Add actuator";
+}
+@section Styles {
+    <link rel="stylesheet" href="~/css/Devices/Devices.css" asp-append-version="true" />
+}
+
+<h1>Create actuator</h1>
+<form method="post">
+    <div class="form-group">
+        <label asp-for="Actuator.Name"></label>
+        <input asp-for="Actuator.Name" class="form-control" />
+        <span asp-validation-for="Actuator.Name"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Actuator.LocationId"></label>
+        <input asp-for="Actuator.LocationId" class="form-control" />
+        <span asp-validation-for="Actuator.LocationId"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Actuator.GroupId"></label>
+        <input asp-for="Actuator.GroupId" class="form-control" />
+        <span asp-validation-for="Actuator.GroupId"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Actuator.AssignedVariableId"></label>
+        <input asp-for="Actuator.AssignedVariableId" class="form-control" />
+        <span asp-validation-for="Actuator.AssignedVariableId"></span>
+    </div>
+
+    <button type="submit" asp-page-handler="Save"
+            class="action-btn btn-create"
+            style="display: inline-block; margin-left:50px;background-color:green;">
+        Create
+    </button>
+</form>
