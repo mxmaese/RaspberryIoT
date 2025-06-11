@@ -153,7 +153,7 @@ public class GeneralVariables : IGeneralVariables
         variable.IsDynamic = OriginalVariable.IsDynamic;
         variable.Type = OriginalVariable.Type;
         
-        // Reatachar y actualizar
+        // Reattach and update
         _databasesActions.UpdateVariable(variable);
         if (hasToChangeValue)
         {
