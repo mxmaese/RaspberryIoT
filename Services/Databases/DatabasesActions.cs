@@ -170,7 +170,7 @@ public class DatabasesActions : IDatabasesActions
         {
             try
             {
-                var AllPendingSensors = _Context.Sensors.Where(x => x.LastReferenceChange < DateTime.Now.AddMinutes(-_Settings.RealoadPendingCodeReferenceInterval)).ToList();
+                var AllPendingSensors = _Context.Sensors.Where(x => x.LastReferenceChange < DateTime.Now.AddMinutes(-_Settings.ReloadPendingCodeReferenceInterval)).ToList();
                 if (AllPendingSensors.Any())
                 {
                     foreach (var sensor in AllPendingSensors)
@@ -180,7 +180,7 @@ public class DatabasesActions : IDatabasesActions
                         _Context.Sensors.Update(sensor);
                     }
                 }
-                var AllPendingActuators = _Context.Actuators.Where(x => x.LastReferenceChange < DateTime.Now.AddMinutes(-_Settings.RealoadPendingCodeReferenceInterval)).ToList();
+                var AllPendingActuators = _Context.Actuators.Where(x => x.LastReferenceChange < DateTime.Now.AddMinutes(-_Settings.ReloadPendingCodeReferenceInterval)).ToList();
                 if (AllPendingActuators.Any())
                 {
                     foreach (var actuator in AllPendingActuators)
@@ -212,7 +212,7 @@ public class DatabasesActions : IDatabasesActions
 
                 // Si se respeta el intervalo y todavía no venció, salimos sin cambios
                 if (!ignorarIntervalo &&
-                    sensor.LastReferenceChange >= DateTime.Now.AddMinutes(-_Settings.RealoadPendingCodeReferenceInterval))
+                    sensor.LastReferenceChange >= DateTime.Now.AddMinutes(-_Settings.ReloadPendingCodeReferenceInterval))
                 {
                     return null;
                 }
@@ -246,7 +246,7 @@ public class DatabasesActions : IDatabasesActions
 
                 // Si se respeta el intervalo y todavía no venció, salimos sin cambios
                 if (!ignorarIntervalo &&
-                    Actuator.LastReferenceChange >= DateTime.Now.AddMinutes(-_Settings.RealoadPendingCodeReferenceInterval))
+                    Actuator.LastReferenceChange >= DateTime.Now.AddMinutes(-_Settings.ReloadPendingCodeReferenceInterval))
                 {
                     return null;
                 }

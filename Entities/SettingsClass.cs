@@ -13,7 +13,7 @@ public class SettingsClass
     public List<Cookie> Cookies { get; set; }
     public bool IsDebug { get; set; }
     public float CalculateDynamicVariablesInterval { get; set; }
-    public float RealoadPendingCodeReferenceInterval { get; set; }
+    public float ReloadPendingCodeReferenceInterval { get; set; }
     public float ReferenceCodeExpirationTime { get; set; }
     public int ReferenceCodeLength { get; set; }
     public Databases DatabaseConection { get; set; }

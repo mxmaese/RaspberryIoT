@@ -26,7 +26,7 @@ public class ChangeReferenceCodeTimer : IHostedService
     public Task StartAsync(CancellationToken cancellationToken)
     {
         UpdateSettings();
-        _timer = new Timer(ChangeReferenceCode, null, TimeSpan.FromSeconds(15), TimeSpan.FromMinutes(_Settings.RealoadPendingCodeReferenceInterval));
+        _timer = new Timer(ChangeReferenceCode, null, TimeSpan.FromSeconds(15), TimeSpan.FromMinutes(_Settings.ReloadPendingCodeReferenceInterval));
         return Task.CompletedTask;
     }
     public Task StopAsync(CancellationToken cancellationToken)
@@ -46,6 +46,6 @@ public class ChangeReferenceCodeTimer : IHostedService
     }
     void ResetTimer()
     {
-        _timer.Change(TimeSpan.FromMinutes(_Settings.RealoadPendingCodeReferenceInterval), TimeSpan.FromMinutes(_Settings.RealoadPendingCodeReferenceInterval));
+        _timer.Change(TimeSpan.FromMinutes(_Settings.ReloadPendingCodeReferenceInterval), TimeSpan.FromMinutes(_Settings.ReloadPendingCodeReferenceInterval));
     }
 }
