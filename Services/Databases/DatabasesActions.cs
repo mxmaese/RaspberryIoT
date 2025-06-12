@@ -422,7 +422,19 @@ public class DatabasesActions : IDatabasesActions
     {
         return ExecuteReadWithRetry(() =>
         {
-            return _Context.Users.AsNoTracking().FirstOrDefault(x => x.UserId == User.UserId || x.UserName == User.UserName);
+            return _Context.Users.AsNoTracking().FirstOrDefault(x =>
+                (User.UserId != 0 && x.UserId == User.UserId) ||
+                (!string.IsNullOrEmpty(User.UserName) && x.UserName == User.UserName) ||
+                (!string.IsNullOrEmpty(User.Email) && x.Email == User.Email) ||
+                (!string.IsNullOrEmpty(User.ApiToken) && x.ApiToken == User.ApiToken));
+        });
+    }
+
+    public User? GetUserByApiToken(string apiToken)
+    {
+        return ExecuteReadWithRetry(() =>
+        {
+            return _Context.Users.AsNoTracking().FirstOrDefault(u => u.ApiToken == apiToken);
         });
     }
     public User CreateUser(User user)
@@ -575,7 +587,7 @@ public class DatabasesActions : IDatabasesActions
         return result.ToString();
     }
 
-    // Método para garantizar la unicidad del código en la base de datos
+    // Método para garantizar la unicidad del código en la base de datos para dispositivos
     public string GenerateUniqueToken()
     {
         string Token;
@@ -585,6 +597,18 @@ public class DatabasesActions : IDatabasesActions
         } while (_Context.Actuators.Any(actual => actual.Token == Token) ||
                  _Context.Sensors.Any(actual => actual.Token == Token));
         return Token;
+    }
+
+    // Token único para autenticación de usuarios basado en GUID
+    public string GenerateUniqueUserApiToken()
+    {
+        string token;
+        do
+        {
+            token = Guid.NewGuid().ToString();
+        } while (_Context.Users.Any(u => u.ApiToken == token));
+
+        return token;
     }
     public string GenerateDeviceReference()
     {
@@ -614,6 +638,7 @@ public interface IDatabasesActions
     void UpdateDevice<T>(T Device) where T : class;
     void DeleteDevice<T>(int DeviceId);
     public string GenerateUniqueToken();
+    public string GenerateUniqueUserApiToken();
     public string GenerateDeviceReference();
 
     //Variables
@@ -624,6 +649,7 @@ public interface IDatabasesActions
 
     //Users
     User? GetUser(User UserId);
+    User? GetUserByApiToken(string apiToken);
     User CreateUser(User user);
     void UpdateUser(User user);
     void DeleteUser(int UserId);

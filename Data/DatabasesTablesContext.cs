@@ -114,6 +114,7 @@ public class DatabaseContext : DbContext
             entity.Property(e => e.UserName)  .HasColumnName("username");
             entity.Property(e => e.Email)     .HasColumnName("email");
             entity.Property(e => e.Password)  .HasColumnName("password");
+            entity.Property(e => e.ApiToken)  .HasColumnName("api_token");
             entity.Property(e => e.CreatedAt) .HasColumnName("created_at");
         });
 
