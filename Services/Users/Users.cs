@@ -56,6 +56,7 @@ public class Users : IUsers
             UserName = NewUser.RegisteUsername,
             Email = NewUser.RegisterEmail,
             Password = NewUser.RegisterPassword,
+            ApiToken = _databasesActions.GenerateUniqueUserApiToken(),
             CreatedAt = DateTime.Now
         });
 
@@ -148,6 +149,11 @@ public class Users : IUsers
         {LoginErrorMessages.NotInsertedPassword, "web.auth.login.notinsertedpassword" },//"NotInsertedPassword" },
         {LoginErrorMessages.PasswordIsIncorrect, "web.auth.login.passwordisincorrect" },//"PasswordIsIncorrect" }
     };
+
+    public User? GetUserByApiToken(string apiToken)
+    {
+        return _databasesActions.GetUserByApiToken(apiToken);
+    }
 }
 public interface IUsers
 {
@@ -156,6 +162,7 @@ public interface IUsers
 
     public Task<List<(LoginErrorMessages Error, string message)>> LoginUser(IUsers.LoginFormModel LoginForm);
     List<LoginErrorMessages> CheckLoginUser(IUsers.LoginFormModel LoginForm);
+    User? GetUserByApiToken(string apiToken);
 
     public class RegisterFormModel
     {
