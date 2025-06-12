@@ -562,6 +562,54 @@ public class DatabasesActions : IDatabasesActions
     }
     #endregion
 
+    //Events
+    #region Events
+    public List<Event> GetEvents(Event filter)
+    {
+        return ExecuteReadWithRetry(() =>
+        {
+            var query = _Context.Events.AsNoTracking().AsQueryable();
+            if (filter.EventId != 0) query = query.Where(x => x.EventId == filter.EventId);
+            if (!string.IsNullOrEmpty(filter.Name)) query = query.Where(x => x.Name == filter.Name);
+            if (filter.OwnerId != 0) query = query.Where(x => x.OwnerId == filter.OwnerId);
+            if (filter.IsEnabled) query = query.Where(x => x.IsEnabled == filter.IsEnabled);
+            return query.ToList();
+        });
+    }
+
+    public void CreateEvent(Event ev)
+    {
+        ExecuteWithRetry(() =>
+        {
+            ev.CreatedAt = DateTime.UtcNow;
+            _Context.Events.Add(ev);
+            _Context.SaveChanges();
+        });
+    }
+
+    public void UpdateEvent(Event ev)
+    {
+        ExecuteWithRetry(() =>
+        {
+            _Context.Events.Update(ev);
+            _Context.SaveChanges();
+        });
+    }
+
+    public void DeleteEvent(int eventId)
+    {
+        ExecuteWithRetry(() =>
+        {
+            var ev = _Context.Events.FirstOrDefault(e => e.EventId == eventId);
+            if (ev != null)
+            {
+                _Context.Events.Remove(ev);
+                _Context.SaveChanges();
+            }
+        });
+    }
+    #endregion
+
 
 
     //Other
@@ -662,4 +710,10 @@ public interface IDatabasesActions
 
     //Traductions
     string GetTraduction(string Key, int languageId);
+
+    //Events
+    List<Event> GetEvents(Event filter);
+    void CreateEvent(Event ev);
+    void UpdateEvent(Event ev);
+    void DeleteEvent(int eventId);
 }

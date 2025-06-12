@@ -28,6 +28,7 @@ public class DatabaseContext : DbContext
     public DbSet<Variable>      Variables      => Set<Variable>();
     public DbSet<Language> Languages => Set<Language>();
     public DbSet<Traduction> Translations => Set<Traduction>();
+    public DbSet<Event> Events => Set<Event>();
 
 
 
@@ -241,6 +242,26 @@ public class DatabaseContext : DbContext
             entity.Property(e => e.LanguageId)         .HasColumnName("language_id");
             entity.Property(e => e.TraductionReference).HasColumnName("traduction_reference");
             entity.Property(e => e.Value)              .HasColumnName("value");
+        });
+
+        // ——— EVENTS ————————————————————————
+        modelBuilder.Entity<Event>(entity =>
+        {
+            entity.ToTable("events");
+            entity.HasKey(e => e.EventId);
+
+            entity.Property(e => e.EventId)        .HasColumnName("event_id");
+            entity.Property(e => e.Name)           .HasColumnName("name");
+            entity.Property(e => e.OwnerId)        .HasColumnName("owner_id");
+            entity.Property(e => e.Actions)        .HasColumnName("actions");
+            entity.Property(e => e.Condition)      .HasColumnName("condition");
+            entity.Property(e => e.IntervalMinutes).HasColumnName("interval_minutes");
+            entity.Property(e => e.ScheduledTime)  .HasColumnName("scheduled_time");
+            entity.Property(e => e.IsEnabled)      .HasColumnName("is_enabled");
+            entity.Property(e => e.CreatedAt)      .HasColumnName("created_at");
+            entity.Property(e => e.LastExecutedAt) .HasColumnName("last_executed_at");
+
+            entity.HasOne<User>().WithMany().HasForeignKey(e => e.OwnerId);
         });
     }
 }

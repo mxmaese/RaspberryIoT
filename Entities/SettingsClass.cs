@@ -16,6 +16,7 @@ public class SettingsClass
     public float ReloadPendingCodeReferenceInterval { get; set; }
     public float ReferenceCodeExpirationTime { get; set; }
     public int ReferenceCodeLength { get; set; }
+    public float EventsCheckInterval { get; set; }
     public Databases DatabaseConection { get; set; }
 
 
