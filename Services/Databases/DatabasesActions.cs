@@ -416,6 +416,65 @@ public class DatabasesActions : IDatabasesActions
     }
     #endregion
 
+    #region Events
+    public List<Event> GetEvent(Event evt)
+    {
+        return ExecuteReadWithRetry(() =>
+        {
+            return _Context.Events.AsNoTracking().Where(x =>
+                (evt.EventId != -1 && x.EventId == evt.EventId) ||
+                (evt.OwnerId != -1 && x.OwnerId == evt.OwnerId)).ToList();
+        });
+    }
+    public void CreateEvent(Event evt)
+    {
+        ExecuteWithRetry(() =>
+        {
+            evt.CreatedAt = DateTime.UtcNow;
+            _Context.Events.Add(evt);
+            _Context.SaveChanges();
+        });
+    }
+    public void UpdateEvent(Event evt)
+    {
+        ExecuteWithRetry(() =>
+        {
+            var entryType = _Context.Model.FindEntityType(typeof(Event));
+            var pk = entryType.FindPrimaryKey().Properties;
+
+            var duplicate = _Context.ChangeTracker.Entries<Event>()
+                              .FirstOrDefault(e => pk.All(p =>
+                              {
+                                  var current = e.Property(p.Name).CurrentValue;
+                                  var newVal = typeof(Event).GetProperty(p.Name)?.GetValue(evt);
+                                  return Equals(current, newVal);
+                              }));
+
+            if (duplicate != null)
+            {
+                duplicate.CurrentValues.SetValues(evt);
+            }
+            else
+            {
+                _Context.Attach(evt);
+                _Context.Entry(evt).State = EntityState.Modified;
+            }
+
+            _Context.SaveChanges();
+        });
+    }
+    public void DeleteEvent(int eventId)
+    {
+        ExecuteWithRetry(() =>
+        {
+            var evt = _Context.Events.FirstOrDefault(x => x.EventId == eventId);
+            if (evt == null) throw new Exception("Event not found");
+            _Context.Events.Remove(evt);
+            _Context.SaveChanges();
+        });
+    }
+    #endregion
+
     //Users
     #region Users
     public User? GetUser(User User)
@@ -646,6 +705,12 @@ public interface IDatabasesActions
     void CreateVariable(Variable variable);
     void UpdateVariable(Variable variable);
     void DeleteVariable(int VariableId);
+
+    //Events
+    List<Event> GetEvent(Event evt);
+    void CreateEvent(Event evt);
+    void UpdateEvent(Event evt);
+    void DeleteEvent(int eventId);
 
     //Users
     User? GetUser(User UserId);
