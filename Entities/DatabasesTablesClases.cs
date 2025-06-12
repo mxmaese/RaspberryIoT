@@ -252,3 +252,35 @@ public class Traduction
     public int LanguageId { get; set; }
     public string Value { get; set; }
 }
+
+public class Event
+{
+    public int EventId { get; set; }
+    public string? Name { get; set; }
+    public int OwnerId { get; set; }
+    public string Actions { get; set; } = null!;
+    public EventTriggerType TriggerType { get; set; }
+    public int? IntervalMinutes { get; set; }
+    public string? DailyTime { get; set; }
+    public DateTime? LastExecution { get; set; }
+    public DateTime CreatedAt { get; set; }
+
+    public User? Owner { get; set; }
+
+    public enum EventTriggerType
+    {
+        Api,
+        Timer,
+        Both
+    }
+
+    public static Event GetNull(int eventId = -1, int ownerId = -1, string? name = null)
+    {
+        return new Event()
+        {
+            EventId = eventId,
+            OwnerId = ownerId,
+            Name = name
+        };
+    }
+}
