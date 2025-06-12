@@ -8,6 +8,7 @@ using Services.Traductions;
 using Services.Variables;
 using Web.Cookies;
 using Services.Administrate;
+using Services.Events;
 using Services.Users;
 using Services.GeneralFunctions.Logger;
 using Services.Web.Cookies;
@@ -27,7 +28,7 @@ internal class Program
         builder.Services.AddControllers();
 
 
-        // Configurar autenticación con cookies
+        // Configurar autenticaciÃ³n con cookies
         builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
             .AddCookie(options =>
             {
@@ -82,7 +83,9 @@ internal class Program
         builder.Services.AddSingleton<IFileFunctions, FileFunctions>();
         builder.Services.AddSingleton<Services.GeneralFunctions.Logger.ILogger, Logger>();
 
-        // Registro de ISensors con su implementación Sensors
+        builder.Services.AddSingleton<IEventExecutor, EventExecutor>();
+        builder.Services.AddSingleton<IHostedService, EventsTimer>();
+        // Registro de ISensors con su implementaciÃ³n Sensors
         builder.Services.AddSingleton<IGeneralVariables, GeneralVariables>();
         builder.Services.AddSingleton<ICalculateDynamicVariables, CalculateDynamicVariables>();
         builder.Services.AddSingleton<ISensors, Sensors>();

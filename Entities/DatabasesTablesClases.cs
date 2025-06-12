@@ -252,3 +252,17 @@ public class Traduction
     public int LanguageId { get; set; }
     public string Value { get; set; }
 }
+
+public class Event
+{
+    public int EventId { get; set; }
+    public string Name { get; set; } = null!;
+    public int OwnerId { get; set; }
+    public string Actions { get; set; } = null!;
+    public string? Condition { get; set; }
+    public double? IntervalMinutes { get; set; }
+    public TimeSpan? ScheduledTime { get; set; }
+    public bool IsEnabled { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public DateTime? LastExecutedAt { get; set; }
+}

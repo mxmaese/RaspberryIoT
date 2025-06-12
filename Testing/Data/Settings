@@ -11,6 +11,7 @@
   "ReloadPendingCodeReferenceInterval": 10080.0,
   "ReferenceCodeExpirationTime": 10080.0,
   "ReferenceCodeLength": 8,
+  "EventsCheckInterval": -1.0,
   "DatabaseConection": {
     "DatabaseName": "iot",
     "DatabaseUser": "Server",
