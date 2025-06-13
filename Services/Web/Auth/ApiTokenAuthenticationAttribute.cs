@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Extensions.DependencyInjection;
 using Services.Users;
 
 namespace Services.Web.Auth;
@@ -16,8 +17,8 @@ public class ApiTokenAuthenticationAttribute : Attribute, IAsyncActionFilter
             return;
         }
 
-        var userService = context.HttpContext.RequestServices.GetService<IUsers>();
-        var user = userService?.GetUserByApiToken(token!);
+        var userService = (IUsers)context.HttpContext.RequestServices.GetRequiredService<IUsers>();
+        var user = userService.GetUserByApiToken(token!);
         if (user == null)
         {
             context.Result = new UnauthorizedResult();

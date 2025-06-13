@@ -39,6 +39,6 @@ public class VariablesAddModel : PageModel
     {
         Variable.OwnerId = int.Parse(_authCookiesManager.GetUserIdByCookie());
         _variable.CreateVariable(Variable);
-        return RedirectToPage("/Devices/Variable");
+        return RedirectToPage("/Devices/Events");
     }
 }

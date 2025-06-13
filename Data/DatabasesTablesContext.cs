@@ -255,14 +255,15 @@ public class DatabaseContext : DbContext
             entity.Property(e => e.OwnerId)        .HasColumnName("owner_id");
             entity.Property(e => e.Actions)        .HasColumnName("actions");
             entity.Property(e => e.TriggerType)    .HasColumnName("trigger_type");
-            entity.Property(e => e.IntervalMinutes).HasColumnName("interval_minutes");
+            entity.Property(e => e.Interval).HasColumnName("interval_minutes");
             entity.Property(e => e.DailyTime)      .HasColumnName("daily_time");
             entity.Property(e => e.LastExecution)  .HasColumnName("last_execution");
             entity.Property(e => e.CreatedAt)      .HasColumnName("created_at");
 
-            entity.HasOne<User>()
-                  .WithMany()
+            entity.HasOne(e => e.Owner)
+                  .WithMany(u => u.Events)
                   .HasForeignKey(e => e.OwnerId);
+            //crea la tabla de eventos y prueba si funcionan, y tambien prueba las apis, con el sistema de autentificacion
         });
     }
 }
