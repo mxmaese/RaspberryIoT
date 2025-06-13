@@ -14,6 +14,10 @@ using Services.GeneralFunctions.Logger;
 using Services.Web.Cookies;
 using MySqlConnector;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Microsoft.AspNetCore.Authorization;
+using Services.Web.Auth;
 using Services.SignalR.Server;
 
 internal class Program
@@ -28,17 +32,39 @@ internal class Program
         builder.Services.AddControllers();
 
 
-        // Configurar autenticación con cookies
-        builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-            .AddCookie(options =>
-            {
-                options.LoginPath = "/Account/Login";
-                options.AccessDeniedPath = "/Account/AccessDenied";
-                options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
-                options.SlidingExpiration = true;
-                options.Cookie.HttpOnly = true; // Asegura que la cookie solo se pueda acceder desde el servidor
-                options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // Utiliza siempre HTTPS
-            });
+        // Configurar autenticación con cookies y JWT
+        var cfg = builder.Configuration;
+        var key = Encoding.UTF8.GetBytes(cfg["Jwt:Key"]);
+        var issuer = cfg["Jwt:Issuer"]!;
+
+        builder.Services.AddAuthentication(options =>
+        {
+            options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+        })
+        .AddCookie(options =>
+        {
+            options.LoginPath = "/Account/Login";
+            options.AccessDeniedPath = "/Account/AccessDenied";
+            options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+            options.SlidingExpiration = true;
+            options.Cookie.HttpOnly = true;
+            options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+        })
+        .AddJwtBearer("Events", o => o.TokenValidationParameters = ParamsFor("events-api"))
+        .AddJwtBearer("Administrate", o => o.TokenValidationParameters = ParamsFor("administrate-api"))
+        .AddJwtBearer("Devices", o => o.TokenValidationParameters = ParamsFor("devices-api"));
+
+        TokenValidationParameters ParamsFor(string aud) => new()
+        {
+            ValidateIssuer = true,
+            ValidIssuer = issuer,
+            ValidateAudience = true,
+            ValidAudience = aud,
+            IssuerSigningKey = new SymmetricSecurityKey(key),
+            ClockSkew = TimeSpan.Zero
+        };
+
+        builder.Services.AddAuthorization();
 
         builder.WebHost.ConfigureKestrel(options =>
         {
@@ -97,6 +123,8 @@ internal class Program
         builder.Services.AddSingleton<IAuthCookiesManager, AuthCookiesManager>();
         builder.Services.AddSingleton<ITraductionManager, TraductionManager>();
         builder.Services.AddSingleton<ICookiesManager, CookiesManager>();
+
+        builder.Services.AddSingleton<IJwtTokenBuilder, JwtTokenBuilder>();
 
         builder.Services.AddSingleton<IManageSignalRConnection, ManageSignalRConnection>();
 
