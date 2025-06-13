@@ -154,6 +154,14 @@ public class Users : IUsers
     {
         return _databasesActions.GetUserByApiToken(apiToken);
     }
+
+    public User? ValidateUserCredentials(string username, string password)
+    {
+        var user = _databasesActions.GetUser(new User() { UserName = username });
+        if (user == null) return null;
+        if (user.Password != password) return null;
+        return user;
+    }
 }
 public interface IUsers
 {
@@ -163,6 +171,7 @@ public interface IUsers
     public Task<List<(LoginErrorMessages Error, string message)>> LoginUser(IUsers.LoginFormModel LoginForm);
     List<LoginErrorMessages> CheckLoginUser(IUsers.LoginFormModel LoginForm);
     User? GetUserByApiToken(string apiToken);
+    User? ValidateUserCredentials(string username, string password);
 
     public class RegisterFormModel
     {
