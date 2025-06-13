@@ -45,7 +45,7 @@ public class VariablesEditModel : PageModel
             BuildVariableTypeSelectList();
             return Page();
         }
-        return RedirectToPage("/Devices/Variable");
+        return RedirectToPage("/Devices/Variables");
     }
 
     /* ------------------ helpers privados ------------------- */

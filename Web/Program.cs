@@ -109,7 +109,8 @@ internal class Program
         builder.Services.AddSingleton<IFileFunctions, FileFunctions>();
         builder.Services.AddSingleton<Services.GeneralFunctions.Logger.ILogger, Logger>();
 
-        builder.Services.AddSingleton<IEvents, Services.Events.Events>();
+        builder.Services.AddSingleton<IEvent, Event>();
+        builder.Services.AddSingleton<IEvents, Events>();
         builder.Services.AddSingleton<IHostedService, EventTimer>();
         // Registro de ISensors con su implementación Sensors
         builder.Services.AddSingleton<IGeneralVariables, GeneralVariables>();

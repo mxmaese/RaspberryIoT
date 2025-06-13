@@ -115,6 +115,8 @@ public class User
     public string Password { get; set; } = null!;
     public string ApiToken { get; set; } = null!; // Token to authenticate API requests
     public DateTime CreatedAt { get; set; }
+
+    public List<Event> Events { get; set; }
 }
 public class Group
 {
@@ -260,8 +262,8 @@ public class Event
     public int OwnerId { get; set; }
     public string Actions { get; set; } = null!;
     public EventTriggerType TriggerType { get; set; }
-    public int? IntervalMinutes { get; set; }
-    public string? DailyTime { get; set; }
+    public TimeSpan? Interval { get; set; }
+    public TimeSpan? DailyTime { get; set; }
     public DateTime? LastExecution { get; set; }
     public DateTime CreatedAt { get; set; }
 
@@ -269,9 +271,10 @@ public class Event
 
     public enum EventTriggerType
     {
+        None,
         Api,
         Timer,
-        Both
+        Both,
     }
 
     public static Event GetNull(int eventId = -1, int ownerId = -1, string? name = null)
