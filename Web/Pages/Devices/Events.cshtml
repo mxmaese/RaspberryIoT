@@ -1,6 +1,6 @@
 ﻿@page
 @using Entities
-@model Web.Pages.Devices.VariablesModel
+@model Web.Pages.Devices.EventsModel
 @{
     ViewData["Title"] = "Event";
     ViewData["ConteinsMain"] = false;
@@ -9,10 +9,10 @@
     <link rel="stylesheet" href="~/css/Devices/Devices.css" asp-append-version="true" />
 }
 <main role="main" class="device-page" style="background:none">
-    <h2>Variables</h2>
+    <h2>Events</h2>
     <div class="action-buttons">
         <button class="action-btn btn-create">
-            <a asp-page="/Devices/Add/Variables" style="text-decoration: none; color: white;">
+            <a asp-page="/Devices/Add/Events" style="text-decoration: none; color: white;">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <line x1="12" y1="5" x2="12" y2="19"></line>
                     <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -24,37 +24,28 @@
     <div class="device-grid">
 
         @{
-            var Variables = ViewData["Event"] as List<Entities.Variable> ?? default;
-            if (Variables == default)
+            var Events = ViewData["Event"] as List<Entities.Event> ?? default;
+            if (Events == default)
             {
-                <h1>No tienes aun ninguna variable</h1>
+                <h1>No tienes aun ningun evento</h1>
             }
             else
             {
-                <!--div class="device-card" style=" background: gainsboro; padding-top:0.75rem; padding-bottom:0.75rem">
-                    <div class="variable-info">
-                        <span class="device-id">Id</span>
-                        <h3 class="device-name">Nombre</h3>
-                        <div class="device-value">Estado</div>
-                        <span class="device-value">Valor</span>
-                        <span class="device-value">Es dinamico</span>
-                        <span class="device-value">Formula</span>
-                    </div>
-                </div-->
-                foreach (var Variable in Variables)
+                foreach (var Event in Events)
                 {
                     <div class="device-card">
                         <div class="variable-info">
-                            <span class="device-id">@Variable.VariableId</span>
-                            <h3 class="device-name">@Variable.Name</h3>
+                            <span class="device-id">@Event.EventId</span>
+                            <h3 class="device-name">@Event.Name</h3>
 
                             <div style="display: inline-block; text-align: start; width: 49%;">
-                                <span class="device-value">@Variable.Value</span>
+                                <span class="device-value">@Event.TriggerType.ToString()</span>
                             </div>
 
                             <div style="display: inline-block; text-align: end; width: 49%;">
                                 <button class="device-action-btn btn-modify">
-                                    <a href="/Devices/Edit/Variables?variableId=@Variable.VariableId" style="text-decoration: none; color: black;">
+                                    <a asp-page="/Devices/Edit/Events"
+                                       asp-route-EventId="@Event.EventId" style="text-decoration: none; color: black;">
                                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                             <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
                                             <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>

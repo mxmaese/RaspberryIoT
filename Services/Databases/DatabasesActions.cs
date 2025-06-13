@@ -62,9 +62,18 @@ public class DatabasesActions : IDatabasesActions
         var strategy = _Context.Database.CreateExecutionStrategy();
         strategy.Execute(() =>
         {
-            using var tx = _Context.Database.BeginTransaction();
-            action();
-            tx.Commit();
+            var alreadyInTransaction = _Context.Database.CurrentTransaction != null;
+
+            if (alreadyInTransaction)
+            {
+                action(); // Ya hay transacción, no se crea otra
+            }
+            else
+            {
+                using var tx = _Context.Database.BeginTransaction();
+                action();
+                tx.Commit();
+            }
         });
     }
     private TResult ExecuteWriteWithRetry<TResult>(Func<TResult> action)
@@ -426,6 +435,13 @@ public class DatabasesActions : IDatabasesActions
                 (evt.OwnerId != -1 && x.OwnerId == evt.OwnerId)).ToList();
         });
     }
+    public List<Event> GetEvents()
+    {
+        return ExecuteReadWithRetry(() =>
+        {
+            return _Context.Events.AsNoTracking().ToList();
+        });
+    }
     public void CreateEvent(Event evt)
     {
         ExecuteWithRetry(() =>
@@ -708,6 +724,7 @@ public interface IDatabasesActions
 
     //Events
     List<Event> GetEvent(Event evt);
+    List<Event> GetEvents();
     void CreateEvent(Event evt);
     void UpdateEvent(Event evt);
     void DeleteEvent(int eventId);

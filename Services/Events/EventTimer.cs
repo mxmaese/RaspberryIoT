@@ -33,30 +33,24 @@ public class EventTimer : IHostedService
 
     private void Work(object? state)
     {
-        var events = _database.GetEvent(Event.GetNull());
+        var events = _database.GetEvents();
         foreach (var evt in events)
         {
             if (evt.TriggerType == Event.EventTriggerType.Timer || evt.TriggerType == Event.EventTriggerType.Both)
             {
-                if (evt.IntervalMinutes.HasValue)
+                if (evt.Interval.HasValue)
                 {
-                    if (evt.LastExecution == null || (DateTime.UtcNow - evt.LastExecution.Value).TotalMinutes >= evt.IntervalMinutes.Value)
+                    if (evt.LastExecution == null || DateTime.UtcNow - evt.LastExecution.Value >= evt.Interval.Value)
                     {
                         _events.Execute(evt);
                     }
                 }
-                else if (!string.IsNullOrEmpty(evt.DailyTime))
+                else if (evt.DailyTime != null)
                 {
-                    if (TimeOnly.TryParse(evt.DailyTime, out var time))
+                    var now = TimeOnly.FromDateTime(DateTime.UtcNow);
+                    if (evt.LastExecution == null || (evt.LastExecution.GetValueOrDefault().Day != DateTime.Now.Day && DateTime.Now.TimeOfDay < evt.DailyTime))
                     {
-                        var now = TimeOnly.FromDateTime(DateTime.UtcNow);
-                        if (Math.Abs((now - time).TotalMinutes) < 0.5)
-                        {
-                            if (evt.LastExecution == null || evt.LastExecution.Value.Date < DateTime.UtcNow.Date)
-                            {
-                                _events.Execute(evt);
-                            }
-                        }
+                        _events.Execute(evt);
                     }
                 }
             }

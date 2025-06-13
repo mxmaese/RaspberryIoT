@@ -1,0 +1,108 @@
+﻿@page
+@model Web.Pages.Devices.Add.EventsAddModel
+@{
+    ViewData["Title"] = "Add event";
+}
+@section Styles {
+    <link rel="stylesheet" href="~/css/Devices/Devices.css" asp-append-version="true" />
+}
+
+<h1>Create event</h1>
+
+<form method="post">
+    <div class="form-group">
+        <label asp-for="Event.Name"></label>
+        <input asp-for="Event.Name" class="form-control" />
+        <span asp-validation-for="Event.Name"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Event.Actions"></label>
+        <input asp-for="Event.Actions" class="form-control" />
+        <span asp-validation-for="Event.Actions"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Event.TriggerType"></label>
+        <select id="triggerTypeSelect"
+                asp-for="Event.TriggerType"
+                asp-items="Model.EventTriggerTypeSelectList"
+                class="form-control">
+        </select>
+        <span asp-validation-for="Event.TriggerType"></span>
+    </div>
+
+    <div class="TimeGroup form-group">
+        <label asp-for="Event.Interval"></label>
+        <input asp-for="Event.Interval" class="form-control" />
+        <span asp-validation-for="Event.Interval"></span>
+    </div>
+
+    <div class="TimeGroup form-group">
+        <label asp-for="Event.DailyTime"></label>
+        <input asp-for="Event.DailyTime" class="form-control" />
+        <span asp-validation-for="Event.DailyTime"></span>
+    </div>
+
+    <button type="submit" asp-page-handler="Save"
+            class="action-btn btn-create"
+            style="display: inline-block; margin-left:50px;background-color:green;">
+        Save
+    </button>
+</form>
+
+@section Scripts {
+    <script>
+        (function () {
+            const triggerSelect = document.getElementById('triggerTypeSelect');
+            const timeGroups = document.querySelectorAll('.TimeGroup');
+            const formulaGroups = document.querySelectorAll('.FormulaGroup');
+
+            function setGroupState(groups, show) {
+                groups.forEach(group => {
+                    group.style.display = show ? 'block' : 'none';
+                    const inputs = group.querySelectorAll('input, select, textarea');
+                    inputs.forEach(input => {
+                        input.disabled = !show;
+                    });
+                });
+            }
+
+            function toggleGroups() {
+                const value = parseInt(triggerSelect.value);
+
+                switch (value) {
+                    case 0: // None
+                        console.log(0);
+                        setGroupState(timeGroups, false);
+                        setGroupState(formulaGroups, false);
+                        break;
+                    case 1: // API => nada visible
+                        console.log(1);
+                        setGroupState(timeGroups, false);
+                        setGroupState(formulaGroups, true);
+                        break;
+                    case 2: // Timer => solo hora específica
+                        console.log(2);
+                        setGroupState(timeGroups, true);
+                        setGroupState(formulaGroups, false);
+                        break;
+                    case 3: // Both => ambas visibles
+                        console.log(3);
+                        setGroupState(timeGroups, true);
+                        setGroupState(formulaGroups, true);
+                        break;
+                    default:
+                        console.log('Default case');
+                        setGroupState(timeGroups, true);
+                        setGroupState(formulaGroups, true);
+                        break;
+                }
+            }
+
+
+            triggerSelect.addEventListener('change', toggleGroups);
+            toggleGroups(); // Estado inicial al cargar la página
+        })();
+    </script>
+}
