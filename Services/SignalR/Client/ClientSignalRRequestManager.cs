@@ -71,7 +71,6 @@ public class ClientSignalRRequestManager : IClientSignalRRequestManager
         if (!TokensPins.ContainsKey(token))
         {
             TokensPins.Add(token, pin);
-            ClientSignalRConnetionManager.HubConnection.SendAsync("SetUpCredentials", token).Wait();
         }
     }
 
@@ -82,10 +81,8 @@ public class ClientSignalRRequestManager : IClientSignalRRequestManager
         {
             foreach (var device in devices)
             {
-                if (!TokensPins.ContainsKey(device.Token))
-                {
-                    AddTokenPin(device.Token, device.Pin);
-                }
+                AddTokenPin(device.Token, device.Pin);
+                ClientSignalRConnetionManager.HubConnection.SendAsync("SetUpCredentials", device.Token).Wait();
             }
         }
         else
