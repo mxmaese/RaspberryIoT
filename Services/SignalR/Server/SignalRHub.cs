@@ -30,6 +30,7 @@ public class SignalRHub : Hub
     {
         // You can add logic here when a client disconnects
         Console.WriteLine($"Client disconnected: {Context.ConnectionId}");
+        _manageConnections.RemoveConnection(Context.ConnectionId);
         return base.OnDisconnectedAsync(exception);
     }
 
