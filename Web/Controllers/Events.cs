@@ -24,3 +24,34 @@ public class Events : ControllerBase
         return Ok();
     }
 }
+
+
+[Route("api/[controller]")]
+[ApiController]
+public class EventsToken : ControllerBase
+{
+    private readonly IEvents _eventsService;
+    private readonly ILogger<EventsToken> _logger;
+
+    public EventsToken(IEvents eventsService, ILogger<EventsToken> logger)
+    {
+        _eventsService = eventsService;
+        _logger = logger;
+    }
+
+    [HttpPost("{eventId}/execute")]
+    public IActionResult Execute(int eventId, [FromBody] string token)
+    {
+        var Owner = _eventsService.GetOwner(eventId);
+        if (Owner.ApiToken == token)
+        {
+            _eventsService.TriggerEvent(eventId);
+        }
+        else
+        {
+           _logger.LogWarning($"Failed to execute event {eventId} with token {token}");
+            return Unauthorized("Invalid token");
+        }
+        return Ok();
+    }
+}

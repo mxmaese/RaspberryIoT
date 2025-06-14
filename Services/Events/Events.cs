@@ -35,6 +35,13 @@ public class Events : IEvents
         return _databaseActions.GetEvent(Event.GetNull(ownerId: userId));
     }
 
+    public User GetOwner(int eventId)
+    {
+        var evt = _databaseActions.GetEvent(Event.GetNull(eventId: eventId)).FirstOrDefault();
+        if (evt == null) return null;
+        return _databaseActions.GetUser(User.GetNull(userId: evt.OwnerId));
+    }
+
     public void TriggerEvent(int eventId)
     {
         var evt = _databaseActions.GetEvent(Event.GetNull(eventId: eventId)).FirstOrDefault();
@@ -168,6 +175,7 @@ public interface IEvents
 {
     Event? GetEvent(int eventId);
     List<Event>? GetEventsByUser(int userId);
+    User GetOwner(int eventId);
     void TriggerEvent(int eventId);
     void Execute(Event evt);
     Task<List<(Events.EditEventErrorMessages Error, string message)>> EditVariable(Event OriginalEvent);

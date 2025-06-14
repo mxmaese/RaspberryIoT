@@ -36,6 +36,8 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddSingleton<IClientSignalRConnetionManager, ClientSignalRConnetionManager>();
 builder.Services.AddSingleton<IClientSignalRRequestManager, ClientSignalRRequestManager>();
 
+builder.Services.AddSingleton<IFileFunctions, FileFunctions>();
+
 builder.Services.AddSignalR();
 
 var app = builder.Build();
@@ -44,11 +46,6 @@ var app = builder.Build();
 #endregion
 
 app.Services.GetRequiredService<IClientSignalRConnetionManager>().CreateConnection("https://localhost:5000");
-
-app.Services.GetRequiredService<IClientSignalRRequestManager>().AddTokenPin("PKRFCQCD", "0");
-app.Services.GetRequiredService<IClientSignalRRequestManager>().AddTokenPin("4OXUZSFB", "1");
-
-app.Services.GetRequiredService<IClientSignalRRequestManager>().SendSensorValue("PKRFCQCD", 40);
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

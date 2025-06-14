@@ -74,21 +74,24 @@ internal class Program
                     listenOptions.UseHttps();
                 });
             #else
-                options.ListenAnyIP(5000, listenOptions =>
+                options.ListenAnyIP(443, listenOptions =>
                 {
                     listenOptions.UseHttps("../IotCertificate.pfx", "AdelV1043");
                 });
             #endif
         });
 
-        var settings = new Settings(new FileFunctions()).ReadSettings();
-        var connectionString = settings.DatabaseConection.GetConnectionString();
-        var context = ContextFactory.CreateContext<DatabaseContext>(connectionString);
-
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddHttpContextAccessor();
 
-        builder.Services.AddSingleton<DatabaseContext>(provider => context);
+        builder.Services.AddSingleton<DatabaseContext>(sp =>
+        {
+            var settings = sp.GetRequiredService<ISettings>().ReadSettings();
+            var cs = settings.DatabaseConection.GetConnectionString();
+
+            // Tu factory estático
+            return ContextFactory.CreateContext<DatabaseContext>(cs);
+        });
 
         builder.Services.AddSingleton<IDatabasesActions, DatabasesActions>(/*provider =>
         {

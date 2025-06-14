@@ -117,6 +117,19 @@ public class User
     public DateTime CreatedAt { get; set; }
 
     public List<Event> Events { get; set; }
+
+
+    public static User GetNull(int? userId = null, string? userName = null, string? email = null, string? password = null, string? apiToken = null)
+    {
+        return new User()
+        {
+            UserId = userId ?? -1,
+            UserName = userName,
+            Email = email,
+            Password = password,
+            ApiToken = apiToken,
+        };
+    }
 }
 public class Group
 {

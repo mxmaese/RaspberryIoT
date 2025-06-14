@@ -1,7 +1,7 @@
 ﻿using Entities;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
-using Services.GeneralFunctions.Logger;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -13,8 +13,11 @@ namespace Services.GeneralFunctions;
 public class FileFunctions : IFileFunctions
 {
     public ILogger _Logger { get; set; }
-    public IServiceControl _ServiceControl { get; set; }
 
+    public FileFunctions(ILogger<FileFunctions> logger)
+    {
+        _Logger = logger;
+    }
 
     public List<T> ReadListFromFile<T>(string Path)
     {
@@ -132,15 +135,7 @@ public class FileFunctions : IFileFunctions
         }
         catch (Exception ex)
         {
-            try
-            {
-                _Logger?.LogWithoutWriting($"El archivo no pudo ser escrito: {ex.Message}", Logger.Logger.Log.LogTypes.Error);
-                _ServiceControl.ShutdownWithError(ex);
-            }
-            catch (Exception ex2)
-            {
-                _ServiceControl.ShutdownWithError(ex2);
-            }
+            _Logger?.LogError($"El archivo no pudo ser escrito: {ex.Message}");
         }
     }
 
@@ -153,11 +148,11 @@ public class FileFunctions : IFileFunctions
             if (!Directory.Exists(DirectoryPath))
             {
                 Directory.CreateDirectory(DirectoryPath);
-                _Logger?.LogWithoutWriting($"Directorio creado: {path}", Logger.Logger.Log.LogTypes.Info);
+                _Logger?.LogInformation($"Directorio creado: {path}");
             }
             using (FileStream fs = File.Create(path))
             {
-                _Logger?.LogWithoutWriting($"Archivo creado: {path}", Logger.Logger.Log.LogTypes.Info);
+                _Logger?.LogInformation($"Archivo creado: {path}");
             }
             DirectoryPath = default;
         }
@@ -187,7 +182,7 @@ public class FileFunctions : IFileFunctions
         string? solutionPath = currentDirectory;
         if (solutionPath == null)
         {
-            _Logger?.LogWithoutWriting($"No se ha podido obtener el directorio de la solucion {AppDomain.CurrentDomain.BaseDirectory}", Logger.Logger.Log.LogTypes.Error);
+            _Logger.LogError($"No se ha podido obtener el directorio de la solucion {AppDomain.CurrentDomain.BaseDirectory}");
             throw new Exception($"No se ha podido obtener el directorio de la solucion {AppDomain.CurrentDomain.BaseDirectory}");
         }
         string directoryPath = Path.GetFullPath(Path.Combine(solutionPath, BasePath));
@@ -196,22 +191,19 @@ public class FileFunctions : IFileFunctions
 #endif
         return MakeValidFileName(directoryPath);
     }
-
-
-    public void CheckIserviceControlAndUpdate(IServiceControl seriveControl)
-    {
-        if (_ServiceControl == null)
-        {
-            _ServiceControl = seriveControl;
-        }
-    }
-
-    public void CheckILoggerAndUpdate(ILogger logger)
-    {
-        if (_Logger == null)
-        {
-            _Logger = logger;
-        }
-    }
 }
 
+
+
+public interface IFileFunctions
+{
+    public ILogger _Logger { get; set; }
+    //    public IServiceControl _ServiceControl { get; set; }
+
+
+    public List<T> ReadListFromFile<T>(string filePath);
+    public T ReadFromFile<T>(string filePath);
+
+    public void WriteListToFile<T>(string Path, List<T> items, [CallerFilePath] string filePath = "", [CallerMemberName] string memberName = "", [CallerLineNumber] int lineNumber = 0);
+    public void WriteToFile<T>(string Path, T item, [CallerFilePath] string filePath = "", [CallerMemberName] string memberName = "", [CallerLineNumber] int lineNumber = 0);
+}

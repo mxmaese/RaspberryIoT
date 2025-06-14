@@ -8,7 +8,7 @@ namespace Services.Web.Auth;
 
 public interface IJwtTokenBuilder
 {
-    string BuildJwt(IEnumerable<Claim> claims, string audience);
+    string BuildJwt(IEnumerable<Claim> claims, string audience, int minutes = 30);
 }
 
 public class JwtTokenBuilder : IJwtTokenBuilder
@@ -20,7 +20,7 @@ public class JwtTokenBuilder : IJwtTokenBuilder
         _config = config;
     }
 
-    public string BuildJwt(IEnumerable<Claim> claims, string audience)
+    public string BuildJwt(IEnumerable<Claim> claims, string audience, int minutes = 30)
     {
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -29,7 +29,7 @@ public class JwtTokenBuilder : IJwtTokenBuilder
             issuer: _config["Jwt:Issuer"],
             audience: audience,
             claims: claims,
-            expires: DateTime.UtcNow.AddMinutes(30),
+            expires: DateTime.UtcNow.AddMinutes(minutes),
             signingCredentials: creds);
 
         return new JwtSecurityTokenHandler().WriteToken(token);

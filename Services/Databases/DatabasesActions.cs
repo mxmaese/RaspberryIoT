@@ -498,9 +498,10 @@ public class DatabasesActions : IDatabasesActions
         return ExecuteReadWithRetry(() =>
         {
             return _Context.Users.AsNoTracking().FirstOrDefault(x =>
-                (User.UserId != 0 && x.UserId == User.UserId) ||
+                (User.UserId != -1 && x.UserId == User.UserId) ||
                 (!string.IsNullOrEmpty(User.UserName) && x.UserName == User.UserName) ||
                 (!string.IsNullOrEmpty(User.Email) && x.Email == User.Email) ||
+                (!string.IsNullOrEmpty(User.Password) && x.Password == User.Password) ||
                 (!string.IsNullOrEmpty(User.ApiToken) && x.ApiToken == User.ApiToken));
         });
     }
